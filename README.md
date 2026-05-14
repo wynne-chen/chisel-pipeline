@@ -54,13 +54,15 @@ Raw datasets are not stored in this repository. The notebook expects `data_dir` 
 ## Installation
 Dependencies are managed with Poetry. 
 
-The project currently targets Python `3.11+`. A clean setup looks like:
+The project currently targets Python `3.11+`. If you do not have `3.11`, use [Pyenv](https://github.com/pyenv/pyenv) to manage multiple Python versions and switch to `3.11` before set-up. You can skip the poetry installation step if you already have it.
 
 ```bash
-python3.11 --version
-pipx install poetry
+python --version    # ensure version is 3.11
+pip install poetry
 poetry env use python3.11
 poetry install --with notebook
+source $(poetry env info --path)/bin/activate
+python -m ipykernel install --user --name chisel-pipeline-py3.11 --display-name "Chisel pipeline (py3.11)"
 ```
 
 Notes:
@@ -69,28 +71,13 @@ Notes:
 - `--with notebook` also installs the notebook tooling declared under the `notebook` dependency group, including `jupyterlab` and `ipykernel`.
 - `kaleido` is needed for Plotly image export in the EDA report flow.
 - Geospatial packages such as `rasterio` and `geopandas` may require system libraries depending on your environment.
-- If you already have Poetry installed, you can skip `pipx install poetry`.
+- The last two steps 
 
-## Environment setup
-Before running the project:
+## Environment setup:
+If all of the above steps have been completed correctly, when you open `template.ipynb` you should be able to select the poetry environment in the kernel, in the top right. 
 
 1. Keep your raw dataset outside this repo and note its path.
-2. Start Jupyter from the `notebooks/` directory.
-3. Verify that the Natural Earth country lookup files expected by `libs/spatial_metadata.py` are available under `data/`.
-
-Starting from `notebooks/` is important for two reasons:
-
-- `notebooks/template.ipynb` prepends `Path.cwd().parent` to `sys.path`, which assumes the notebook working directory is `notebooks/`.
-- `config.py` builds `output_dir` and `quarantine_dir` from `os.getcwd()`, so output paths change depending on where you launch the workflow.
-
-Recommended launch:
-
-```bash
-cd notebooks
-poetry run jupyter lab template.ipynb
-```
-
-If you run the notebook from `notebooks/`, generated files will be written under `notebooks/quarantine/`, `notebooks/output/`, and `notebooks/reports/`.
+2. Verify that the Natural Earth country lookup files expected by `libs/spatial_metadata.py` are available under `data/`.
 
 ## Data/input formats
 `pipeline.py` loads a dataset by recursively scanning `data_dir` and pairing images with masks using `libs/file_handler.py`.
