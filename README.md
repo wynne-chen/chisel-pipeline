@@ -71,7 +71,6 @@ Notes:
 - `--with notebook` also installs the notebook tooling declared under the `notebook` dependency group, including `jupyterlab` and `ipykernel`.
 - `kaleido` is needed for Plotly image export in the EDA report flow.
 - Geospatial packages such as `rasterio` and `geopandas` may require system libraries depending on your environment.
-- The last two steps 
 
 ## Environment setup:
 If all of the above steps have been completed correctly, when you open `template.ipynb` you should be able to select the poetry environment in the kernel, in the top right. 
