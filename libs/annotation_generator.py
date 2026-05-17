@@ -108,7 +108,8 @@ class AnnotationGenerator:
         holes_map = {}
 
         for i, contour in enumerate(hierarchy):
-            parent_idx = hierarchy[3]
+            parent_idx = hierarchy[3] # This looks like an error. This is taking the 4th contour's full [next, prev, child, parent]. parent_idx then
+                                      # becomes an array. not a scalar.
             
             if parent_idx == -1:
                 if contours_approx[i] is not None:
