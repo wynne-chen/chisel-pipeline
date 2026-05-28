@@ -9,6 +9,8 @@ config = {
     'mask_dirs': ['mask', 'masks', 'label', 'labels'],
     'mask_prefixes': ['mask_', 'label_'],
     'mask_suffixes': ['_mask', '_m'],
+    'image_prefixes': ['image_', 'img_'],
+    'image_suffixes': ['_image', '_img'],
     'mask_alpha': 0.5,
     'quarantine_dir': os.path.join(os.getcwd(), 'quarantine'),
     'output_dir': os.path.join(os.getcwd(), 'output'),

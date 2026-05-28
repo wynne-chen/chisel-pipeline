@@ -34,6 +34,9 @@ class FileHandler:
         mask_dirs = set(self.config.get('mask_dirs', ['mask', 'masks', 'label', 'labels']))
         mask_prefixes = tuple(self.config.get('mask_prefixes', ['mask_', 'label_']))
         mask_suffixes = tuple(self.config.get('mask_suffixes', ['_mask', '_m.']))
+        image_prefixes = tuple(self.config.get('image_prefixes', []))
+        image_suffixes = tuple(self.config.get('image_suffixes', []))
+        
         
         all_filepaths = [f for f in glob.glob(os.path.join(data_dir, '**', '*.*'), recursive=True)]
         
@@ -51,17 +54,30 @@ class FileHandler:
             parent_parts = {part.lower() for part in path.parts[:-1]}
 
             is_mask = (
-                any(part in mask_dirs for part in parent_parts)
+                any(
+                    part in mask_dirs
+                    or any(tok in mask_dirs for tok in part.replace('-', '_').replace('.', '_').split('_') if tok)
+                    for part in parent_parts
+                )
                 or stem.startswith(mask_prefixes)
                 or stem.endswith(mask_suffixes)
             )
+
             key = stem
-            for prefix in mask_prefixes:
-                if key.startswith(prefix):
-                    key = key.removeprefix(prefix)
-            for suffix in mask_suffixes:
-                if key.endswith(suffix):
-                    key = key.removesuffix(suffix)
+            if is_mask:
+                for prefix in mask_prefixes:
+                    if key.startswith(prefix):
+                        key = key.removeprefix(prefix)
+                for suffix in mask_suffixes:
+                    if key.endswith(suffix):
+                        key = key.removesuffix(suffix)
+            else:
+                for prefix in image_prefixes:
+                    if key.startswith(prefix):
+                        key = key.removeprefix(prefix)
+                for suffix in image_suffixes:
+                    if key.endswith(suffix):
+                        key = key.removesuffix(suffix)
 
             target = mask_maps if is_mask else image_maps
             target.setdefault(key, []).append(filepath)

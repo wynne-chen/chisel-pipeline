@@ -557,7 +557,7 @@ class DatasetEDA:
         for i in self.sample_indices:
             image = self.load_image(i)
             if not self.valid_image(image):
-                self.logger.warning(f"Image {i} is not a 3-channel image. Skipping.")
+                self.logger.warning(f"Image {i} is not a valid image. Skipping.")
                 continue
             pixels = image.reshape(-1, 3)
             b = pixels[:, 0]
@@ -1185,7 +1185,7 @@ class DatasetEDA:
         unique_values = self.all_unique_mask_values()
         text_lines = [f"Total number of unique values: {len(unique_values)}"]
         text_lines.append(f"Unique values: {unique_values}")
-        text_lines.append(f"This is a {'single' if self.only_one_class else 'multiclass'} dataset.")
+        text_lines.append(f"This is a {'single class' if self.only_one_class else 'multiclass'} dataset.")
 
         sec = ReportSection(
             idx=idx, 

@@ -138,9 +138,9 @@ def process_dataset_incremental(data_dir, set_name, class_id, config):
 
                 # Generate annotation lines for the current tile
                 if ignore_holes:
-                    polygons = ann_generator.mask_to_polygons_with_holes(mask_tile)
-                else:
                     polygons = ann_generator.mask_to_polygons(mask_tile)
+                else:
+                    polygons = ann_generator.mask_to_polygons_with_holes(mask_tile)
                 annotation_lines = ann_generator.generate_tile_yolo_annotation(polygons, class_id, tile.shape[1], tile.shape[0])
 
                 # Save image tile, mask tile, and annotation only if annotations exist

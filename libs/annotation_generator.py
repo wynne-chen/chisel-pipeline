@@ -89,7 +89,7 @@ class AnnotationGenerator:
             raise ValueError(f"mask_to_polygons: Mask must be 2D for findContours, got shape {mask.shape}")
         contours, hierarchy = cv2.findContours(mask, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE) # changing to CCOMP to find child polygons (holes)
 
-        if not contours or not hierarchy:
+        if len(contours)==0 or hierarchy is None:
             return []
         
         hierarchy = hierarchy[0]
@@ -107,8 +107,8 @@ class AnnotationGenerator:
         parents = {}
         holes_map = {}
 
-        for i, contour in enumerate(hierarchy):
-            parent_idx = hierarchy[3]
+        for i, contour in enumerate(contours_approx):
+            parent_idx = hierarchy[i][3]
             
             if parent_idx == -1:
                 if contours_approx[i] is not None:

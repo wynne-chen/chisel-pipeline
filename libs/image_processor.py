@@ -60,9 +60,10 @@ class ImageProcessor:
 
             if img.ndim == 3:
                 img = np.transpose(img, (1, 2, 0))
-                # Explicitly convert from RGB to BGR for consistency with OpenCV
                 if img.shape[2] == 3: 
-                    img = img[..., ::-1]
+                    img = img[..., ::-1] # convert RGB to BGR
+                elif img.shape[2] > 3:
+                    img = img[..., :3][..., ::-1] # convert 4-channel image to 3-channel image and then to BGR
             elif img.ndim == 2:
                 pass
             else:
